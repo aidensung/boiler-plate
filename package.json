@@ -2,15 +2,13 @@
   "name": "boiler-plate",
   "version": "1.0.0",
   "description": "",
-  "main": "server/index.js",
   "scripts": {
-    "client": "npm run start --prefix client",
+    "client": "cd client && npm run start",
     "start": "node server/index.js",
     "server": "nodemon server/index.js",
-    "build": "npm run build --prefix client",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd client && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm install --prefix client && npm install --only=dev --no-shrinkwrap --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "aidensung",
   "license": "ISC",
