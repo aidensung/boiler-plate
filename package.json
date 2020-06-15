@@ -11,9 +11,8 @@
     "client": "cd client && npm run start",
     "start": "node server/index.js",
     "server": "nodemon server/index.js",
-    "build": "cd client && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
   },
   "author": "aidensung",
   "license": "ISC",
@@ -22,6 +21,7 @@
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-sslify": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
