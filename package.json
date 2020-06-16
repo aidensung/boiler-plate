@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "boiler-plate using MERN",
   "main": "index.js",
-  "engines": {
+  "engine": {
     "node": "12.18.0",
     "npm": "6.14.4"
   },
@@ -12,7 +12,7 @@
     "start": "node server/index.js",
     "server": "nodemon server/index.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "aidensung",
   "license": "ISC",
@@ -23,7 +23,6 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "express-sslify": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.18",
     "path": "^0.12.7"

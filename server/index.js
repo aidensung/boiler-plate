@@ -1,24 +1,16 @@
 const express = require('express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const path = require('path');
-const enforce = require('express-sslify');
-
 const config = require('./config/key');
-
 const { User } = require('./models/User');
 const { auth } = require('./middleware/auth');
+const mongoose = require('mongoose');
 
 const app = express();
+
 const port = process.env.PORT || 5000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(cors());
-
-const mongoose = require('mongoose');
 
 mongoose
   .connect(config.mongoURI, {
@@ -34,8 +26,12 @@ mongoose
     console.log(err);
   });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors());
+
 if (process.env.NODE_ENV === 'production') {
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static('client/build'));
 
   app.get('*', function (req, res) {
@@ -46,12 +42,6 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(port, (error) => {
   if (error) throw error;
   console.log('Server running on port ' + port);
-});
-
-app.get('/', (req, res) => res.send('Hello World! Nice to meet you'));
-
-app.get('/api/hello', (req, res) => {
-  res.send('Helllllllllllllloooooooo');
 });
 
 app.post('/api/users/register', (req, res) => {
