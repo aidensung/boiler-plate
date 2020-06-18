@@ -7,13 +7,20 @@ function RegisterPage(props) {
   const dispatch = useDispatch();
 
   const [userCredentials, setCredentials] = useState({
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
 
-  const { name, email, password, confirmPassword } = userCredentials;
+  const {
+    firstname,
+    lastname,
+    email,
+    password,
+    confirmPassword,
+  } = userCredentials;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,7 +33,7 @@ function RegisterPage(props) {
       if (response.payload.registerSuccess) {
         props.history.push('/login');
       } else {
-        alert('Failed to register');
+        alert('Register failed');
       }
     });
   };
@@ -51,13 +58,22 @@ function RegisterPage(props) {
         style={{ display: 'flex', flexDirection: 'column' }}
         onSubmit={handleSubmit}
       >
-        <label>Name</label>
+        <label>First Name</label>
         <input
-          name='name'
+          name='firstname'
           type='text'
-          value={name}
+          value={firstname}
           onChange={handleChange}
-          label='name'
+          label='firstname'
+          required
+        />
+        <label>Last Name</label>
+        <input
+          name='lastname'
+          type='text'
+          value={lastname}
+          onChange={handleChange}
+          label='lastname'
           required
         />
         <label>Email</label>

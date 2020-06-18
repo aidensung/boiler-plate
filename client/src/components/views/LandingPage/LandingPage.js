@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 
 function LandingPage(props) {
   useEffect(() => {
-    Axios.get('/api/hello').then((res) => console.log(res));
+    Axios.get('/api/hello').then((res) => console.log(res.data));
   }, []);
 
   const handleLogout = () => {
@@ -12,7 +12,7 @@ function LandingPage(props) {
       if (response.data.logoutSuccess) {
         props.history.push('/login');
       } else {
-        alert('Failed to log out');
+        alert('Log out failed');
       }
     });
   };

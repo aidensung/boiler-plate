@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -6,10 +7,8 @@ const path = require('path');
 const config = require('./config/key');
 const { User } = require('./models/User');
 const { auth } = require('./middleware/auth');
-const mongoose = require('mongoose');
 
 const app = express();
-
 const port = process.env.PORT || 5000;
 
 mongoose
@@ -42,6 +41,10 @@ if (process.env.NODE_ENV === 'production') {
 app.listen(port, (error) => {
   if (error) throw error;
   console.log('Server running on port ' + port);
+});
+
+app.get('/api/hello', (req, res) => {
+  res.json({ hi: 'helllllooooo' });
 });
 
 app.post('/api/users/register', (req, res) => {
