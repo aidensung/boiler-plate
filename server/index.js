@@ -44,7 +44,7 @@ app.listen(port, (error) => {
 });
 
 app.get('/api/hello', (req, res) => {
-  res.json({ hi: 'helllllooooo' });
+  res.json({ hi: 'helllllooooooooooooo' });
 });
 
 app.post('/api/users/register', (req, res) => {
