@@ -12,8 +12,6 @@
     "build": "cd client && npm run build",
     "start": "node server/index.js",
     "server": "nodemon server/index.js"
-    // "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    // "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "aidensung",
   "license": "ISC",

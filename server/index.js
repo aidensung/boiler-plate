@@ -102,3 +102,7 @@ app.get('/api/users/logout', auth, (req, res) => {
     return res.status(200).json({ logoutSuccess: true });
   });
 });
+
+// for package.json
+// "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+// "heroku-postbuild": "cd client && npm install && npm run build"
