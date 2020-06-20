@@ -42,38 +42,36 @@ userSchema.pre('save', function (next) {
   const user = this;
 
   if (user.isModified('password')) {
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      if (err) return next(err);
-
-      bcrypt.hash(user.password, salt, function (err, hash) {
-        if (err) return next(err);
+    bcrypt
+      .hash(user.password, saltRounds)
+      .then((hash) => {
         user.password = hash;
         next();
-      });
-    });
+      })
+      .catch((err) => next(err));
   } else {
     next();
   }
 });
 
-userSchema.methods.comparePassword = function (plainPasswor, callBack) {
-  bcrypt.compare(plainPasswor, this.password, function (err, isMatch) {
-    if (err) {
+userSchema.methods.comparePassword = function (plainPassword, callBack) {
+  bcrypt
+    .compare(plainPassword, this.password)
+    .then((isMatch) => {
+      return callBack(null, isMatch);
+    })
+    .catch((err) => {
       return callBack(err);
-    }
-    callBack(null, isMatch);
-  });
+    });
 };
 
 userSchema.methods.generateToken = function (callBack) {
   const user = this;
 
-  // generate token by jsonwebtoken
   const token = jwt.sign(user._id.toHexString(), 'secretToken');
-  // user._id + 'secretToken' = token
-  // 'secretToken' => user._id
 
   user.token = token;
+
   user.save(function (err, user) {
     if (err) return callBack(err);
     callBack(null, user);

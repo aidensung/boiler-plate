@@ -4,7 +4,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
+
 const config = require('./config/key');
+
 const { User } = require('./models/User');
 const { auth } = require('./middleware/auth');
 
@@ -43,10 +45,6 @@ app.listen(port, (error) => {
   console.log('Server running on port ' + port);
 });
 
-app.get('/api/hello', (req, res) => {
-  res.json({ hi: 'helllllooooooooooooo' });
-});
-
 app.post('/api/users/register', (req, res) => {
   const user = new User(req.body);
 
@@ -74,12 +72,12 @@ app.post('/api/users/login', (req, res) => {
       }
 
       user.generateToken((err, user) => {
-        if (err) return res.status(400).send(err);
+        if (err) return res.status(400).json(err);
 
         res
           .cookie('x_auth', user.token)
           .status(200)
-          .json({ loginSuccess: true, userId: user._id });
+          .json({ loginSuccess: true, userId: user._id, token: user.token });
       });
     });
   });
@@ -88,10 +86,11 @@ app.post('/api/users/login', (req, res) => {
 app.get('/api/users/auth', auth, (req, res) => {
   res.status(200).json({
     _id: req.user._id,
-    isAdmin: req.user.role === 0 ? false : true,
     isAuth: true,
+    isAdmin: req.user.role === 0 ? false : true,
     email: req.user.email,
-    name: req.user.name,
+    firstname: req.user.firstname,
+    lastname: req.user.lastname,
     role: req.user.role,
     image: req.user.image,
   });
@@ -100,6 +99,6 @@ app.get('/api/users/auth', auth, (req, res) => {
 app.get('/api/users/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
     if (err) return res.json({ logoutSuccess: false, err });
-    return res.status(200).send({ logoutSuccess: true });
+    return res.status(200).json({ logoutSuccess: true });
   });
 });
