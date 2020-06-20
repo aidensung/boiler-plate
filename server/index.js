@@ -103,6 +103,10 @@ app.get('/api/users/logout', auth, (req, res) => {
   });
 });
 
-// for package.json
+// for scripts in package.json
+
+// "client": "cd client && npm run start",
+// "build": "cd client && npm run build",
+
 // "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
 // "heroku-postbuild": "cd client && npm install && npm run build"
