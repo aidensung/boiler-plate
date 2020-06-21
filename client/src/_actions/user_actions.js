@@ -1,10 +1,13 @@
-import Axios from 'axios';
+import axios from 'axios';
 import ActionTypes from '../_actions/types';
+import prodUrl from '../prodUrl';
+
+const Url = process.env.NODE_ENV === 'production' ? prodUrl : '';
 
 export function loginUser(dataToSubmit) {
-  const request = Axios.post('/api/users/login', dataToSubmit).then(
-    (response) => response.data
-  );
+  const request = axios
+    .post(`${Url}/api/users/login`, dataToSubmit)
+    .then((response) => response.data);
 
   return {
     type: ActionTypes.LOGIN_USER,
@@ -13,9 +16,9 @@ export function loginUser(dataToSubmit) {
 }
 
 export function registerUser(dataToSubmit) {
-  const request = Axios.post('/api/users/register', dataToSubmit).then(
-    (response) => response.data
-  );
+  const request = axios
+    .post(`${Url}/api/users/register`, dataToSubmit)
+    .then((response) => response.data);
 
   return {
     type: ActionTypes.REGISTER_USER,
@@ -24,9 +27,9 @@ export function registerUser(dataToSubmit) {
 }
 
 export function auth() {
-  const request = Axios.get(
-    'https://boilerplate-aiden.herokuapp.com/api/users/auth'
-  ).then((response) => response.data);
+  const request = axios
+    .get(`${Url}/api/users/auth`)
+    .then((response) => response.data);
 
   return {
     type: ActionTypes.AUTH_USER,
@@ -35,9 +38,9 @@ export function auth() {
 }
 
 export function logoutUser() {
-  const request = Axios.get(
-    'https://boilerplate-aiden.herokuapp.com/api/users/logout'
-  ).then((response) => response.data);
+  const request = axios
+    .get(`${Url}/api/users/logout`)
+    .then((response) => response.data);
 
   return {
     type: ActionTypes.LOGOUT_USER,
