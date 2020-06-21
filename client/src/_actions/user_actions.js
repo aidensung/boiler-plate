@@ -2,11 +2,9 @@ import axios from 'axios';
 import ActionTypes from '../_actions/types';
 import prodUrl from '../prodUrl';
 
-const Url = process.env.NODE_ENV === 'production' ? prodUrl : '';
-
 export function loginUser(dataToSubmit) {
   const request = axios
-    .post(`${Url}/api/users/login`, dataToSubmit)
+    .post('/api/users/login', dataToSubmit)
     .then((response) => response.data);
 
   return {
@@ -17,7 +15,7 @@ export function loginUser(dataToSubmit) {
 
 export function registerUser(dataToSubmit) {
   const request = axios
-    .post(`${Url}/api/users/register`, dataToSubmit)
+    .post('/api/users/register', dataToSubmit)
     .then((response) => response.data);
 
   return {
@@ -28,8 +26,8 @@ export function registerUser(dataToSubmit) {
 
 export function auth() {
   const request = axios
-    .get(`${Url}/api/users/auth`, {
-      proxy: { host: 'https://boilerplate-aiden.herokuapp.com' },
+    .get('/api/users/auth', {
+      responseType: 'json',
     })
     .then((response) => response.data);
 
@@ -41,7 +39,9 @@ export function auth() {
 
 export function logoutUser() {
   const request = axios
-    .get(`${Url}/api/users/logout`)
+    .get('/api/users/logout', {
+      responseType: 'json',
+    })
     .then((response) => response.data);
 
   return {
