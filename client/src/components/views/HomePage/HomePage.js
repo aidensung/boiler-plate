@@ -9,7 +9,6 @@ const HomePage = (props) => {
   const handleLogout = () => {
     dispatch(logoutUser()).then((response) => {
       if (response.payload.logoutSuccess) {
-        console.log(response.payload);
         props.history.push('/login');
       } else {
         alert('Log out failed');
@@ -21,6 +20,7 @@ const HomePage = (props) => {
     <div
       style={{
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',

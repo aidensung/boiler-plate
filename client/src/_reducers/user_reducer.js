@@ -1,14 +1,18 @@
 import ActionTypes from '../_actions/types';
 
-export default function (state = {}, action) {
+const userReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.LOGIN_USER:
-      return { ...state, loginSuccess: action.payload };
+      return { ...state, loginSuccess: action.payload.loginSuccess };
     case ActionTypes.REGISTER_USER:
-      return { ...state, register: action.payload };
+      return { ...state, registerSuccess: action.payload.registerSuccess };
     case ActionTypes.AUTH_USER:
-      return { ...state, userData: action.payload };
+      return { ...state, user: action.payload };
+    case ActionTypes.LOGOUT_USER:
+      return { ...state, logoutSuccess: action.payload.logoutSuccess };
     default:
       return state;
   }
-}
+};
+
+export default userReducer;

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
-import Reducer from './_reducers';
+import rootReducer from './_reducers/index';
 
 import * as serviceWorker from './serviceWorker';
 
@@ -14,12 +14,13 @@ import './index.css';
 import App from './components/App';
 import 'antd/dist/antd.css';
 
-const middlewares = [promiseMiddleware, ReduxThunk];
-
-const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
+const createStoreWithMiddleware = applyMiddleware(
+  promiseMiddleware,
+  ReduxThunk
+)(createStore);
 
 const store = createStoreWithMiddleware(
-  Reducer,
+  rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

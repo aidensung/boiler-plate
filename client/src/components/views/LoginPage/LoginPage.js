@@ -20,7 +20,7 @@ const LoginPage = (props) => {
       if (response.payload.loginSuccess) {
         props.history.push('/');
       } else {
-        alert('Error');
+        alert('Login Failed');
       }
     });
   };

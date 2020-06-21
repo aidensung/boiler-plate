@@ -1,8 +1,8 @@
 import Axios from 'axios';
 import ActionTypes from '../_actions/types';
 
-export function loginUser(dataToSubmit) {
-  const request = Axios.post('/api/users/login', dataToSubmit).then(
+export function loginUser(user) {
+  const request = Axios.post('/api/users/login', user).then(
     (response) => response.data
   );
 

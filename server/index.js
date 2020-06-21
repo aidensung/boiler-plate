@@ -77,7 +77,7 @@ app.post('/api/users/login', (req, res) => {
         res
           .cookie('x_auth', user.token)
           .status(200)
-          .json({ loginSuccess: true, userId: user._id, token: user.token });
+          .json({ loginSuccess: true, userId: user._id });
       });
     });
   });
