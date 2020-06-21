@@ -1,6 +1,5 @@
 import axios from 'axios';
 import ActionTypes from '../_actions/types';
-import prodUrl from '../prodUrl';
 
 export function loginUser(dataToSubmit) {
   const request = axios
