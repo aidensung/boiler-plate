@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from '../../../_actions/user_actions';
 import { withRouter } from 'react-router-dom';
 
-function LoginPage(props) {
+const LoginPage = (props) => {
   const dispatch = useDispatch();
 
   const [userCredentials, setCredentials] = useState({
@@ -68,6 +68,6 @@ function LoginPage(props) {
       </form>
     </div>
   );
-}
+};
 
 export default withRouter(LoginPage);

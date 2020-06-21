@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+
 import { applyMiddleware, createStore } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
 import Reducer from './_reducers';
 
+import * as serviceWorker from './serviceWorker';
+
+import './index.css';
+import App from './components/App';
 import 'antd/dist/antd.css';
 
 const middlewares = [promiseMiddleware, ReduxThunk];
@@ -23,7 +26,9 @@ const store = createStoreWithMiddleware(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

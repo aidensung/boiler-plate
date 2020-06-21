@@ -32,13 +32,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static('client/build'));
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
 
-//   app.get('*', function (req, res) {
-//     res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
-//   });
-// }
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 app.listen(port, (error) => {
   if (error) throw error;
@@ -102,11 +102,3 @@ app.get('/api/users/logout', auth, (req, res) => {
     return res.status(200).json({ logoutSuccess: true });
   });
 });
-
-// for scripts in package.json
-
-// "client": "cd client && npm run start",
-// "build": "cd client && npm run build",
-
-// "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-// "heroku-postbuild": "cd client && npm install && npm run build"
