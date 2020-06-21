@@ -28,7 +28,9 @@ export function registerUser(dataToSubmit) {
 
 export function auth() {
   const request = axios
-    .get(`${Url}/api/users/auth`)
+    .get(`${Url}/api/users/auth`, {
+      proxy: { host: 'https://boilerplate-aiden.herokuapp.com' },
+    })
     .then((response) => response.data);
 
   return {
