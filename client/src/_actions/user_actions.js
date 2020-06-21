@@ -25,7 +25,7 @@ export function registerUser(dataToSubmit) {
 
 export function auth() {
   const request = axios
-    .post('/api/users/auth')
+    .get('/api/users/auth')
     .then((response) => response.data);
 
   return {
@@ -36,7 +36,7 @@ export function auth() {
 
 export function logoutUser() {
   const request = axios
-    .post('/api/users/logout')
+    .get('/api/users/logout')
     .then((response) => response.data);
 
   return {

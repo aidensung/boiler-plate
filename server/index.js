@@ -35,7 +35,7 @@ app.use(cors());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 
-  app.get('*', function (req, res) {
+  app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
   });
 }
@@ -82,7 +82,7 @@ app.post('/api/users/login', (req, res) => {
   });
 });
 
-app.post('/api/users/auth', auth, (req, res) => {
+app.get('/api/users/auth', auth, (req, res) => {
   return res.status(200).json({
     _id: req.user._id,
     isAuth: true,
@@ -95,7 +95,7 @@ app.post('/api/users/auth', auth, (req, res) => {
   });
 });
 
-app.post('/api/users/logout', auth, (req, res) => {
+app.get('/api/users/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
     if (err) return res.json({ logoutSuccess: false, err });
     return res.status(200).clearCookie('x_auth').json({ logoutSuccess: true });
