@@ -2,14 +2,14 @@ import ActionTypes from '../_actions/types';
 
 const userReducer = (state = {}, action) => {
   switch (action.type) {
-    case ActionTypes.LOGIN_USER:
-      return { ...state, loginSuccess: action.payload.loginSuccess };
     case ActionTypes.REGISTER_USER:
-      return { ...state, registerSuccess: action.payload.registerSuccess };
+      return { ...state, registerStatus: action.payload };
+    case ActionTypes.LOGIN_USER:
+      return { ...state, loginStatus: action.payload };
     case ActionTypes.AUTH_USER:
-      return { ...state, user: action.payload };
+      return { ...state, userStatus: action.payload };
     case ActionTypes.LOGOUT_USER:
-      return { ...state, logoutSuccess: action.payload.logoutSuccess };
+      return { ...state, loginStatus: action.payload };
     default:
       return state;
   }

@@ -52,7 +52,6 @@ app.post('/api/users/register', (req, res) => {
     if (err) return res.json({ registerSuccess: false, err });
     return res.status(200).json({
       registerSuccess: true,
-      userInfo,
     });
   });
 });
@@ -62,7 +61,7 @@ app.post('/api/users/login', (req, res) => {
     if (!user) {
       return res.json({
         loginSuccess: false,
-        message: 'Auth failed, email not found',
+        message: 'Email not found',
       });
     }
 
@@ -74,7 +73,7 @@ app.post('/api/users/login', (req, res) => {
       user.generateToken((err, user) => {
         if (err) return res.status(400).json(err);
 
-        res
+        return res
           .cookie('x_auth', user.token)
           .status(200)
           .json({ loginSuccess: true, userId: user._id });
@@ -99,6 +98,6 @@ app.get('/api/users/auth', auth, (req, res) => {
 app.get('/api/users/logout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
     if (err) return res.json({ logoutSuccess: false, err });
-    return res.status(200).json({ logoutSuccess: true });
+    return res.status(200).clearCookie('x_auth').json({ logoutSuccess: true });
   });
 });
