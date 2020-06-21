@@ -24,9 +24,9 @@ export function registerUser(dataToSubmit) {
 }
 
 export function auth() {
-  const request = Axios.get('/api/users/auth').then(
-    (response) => response.data
-  );
+  const request = Axios.get(
+    'https://boilerplate-aiden.herokuapp.com/api/users/auth'
+  ).then((response) => response.data);
 
   return {
     type: ActionTypes.AUTH_USER,
@@ -35,9 +35,9 @@ export function auth() {
 }
 
 export function logoutUser() {
-  const request = Axios.get('/api/users/logout').then(
-    (response) => response.data
-  );
+  const request = Axios.get(
+    'https://boilerplate-aiden.herokuapp.com/api/users/logout'
+  ).then((response) => response.data);
 
   return {
     type: ActionTypes.LOGOUT_USER,
