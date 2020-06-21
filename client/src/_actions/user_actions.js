@@ -33,3 +33,14 @@ export function auth() {
     payload: request,
   };
 }
+
+export function logoutUser() {
+  const request = Axios.get('/api/users/logout').then(
+    (response) => response.data
+  );
+
+  return {
+    type: ActionTypes.LOGOUT_USER,
+    payload: request,
+  };
+}

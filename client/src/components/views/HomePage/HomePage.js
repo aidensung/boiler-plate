@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import Axios from 'axios';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../../../_actions/user_actions';
 import { withRouter } from 'react-router-dom';
 
 const HomePage = (props) => {
-  useEffect(() => {
-    Axios.get('/api/hello').then((res) => console.log(res.data));
-  }, []);
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    Axios.get('/api/users/logout').then((response) => {
-      if (response.data.logoutSuccess) {
+    dispatch(logoutUser()).then((response) => {
+      if (response.payload.logoutSuccess) {
+        console.log(response.payload);
         props.history.push('/login');
       } else {
         alert('Log out failed');
