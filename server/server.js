@@ -14,7 +14,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 mongoose
-  .connect(config.mongoURI, {
+  .connect(config.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -46,59 +46,45 @@ app.listen(port, (error) => {
   console.log('Server running on port ' + port);
 });
 
-app.post('/api/users/register', (req, res) => {
+app.post('/api/users/signup', (req, res) => {
   const user = new User(req.body);
 
-  user.save((err, userInfo) => {
-    if (err) return res.json({ registerSuccess: false, err });
-    return res.status(200).json({
-      registerSuccess: true,
-    });
+  user.save((err, user) => {
+    if (err) return res.json({ err: 'Sign-up failed' });
+    return res.status(200).json({ user: user });
   });
 });
 
-app.post('/api/users/login', (req, res) => {
+app.post('/api/users/signin', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
-      return res.json({
-        loginSuccess: false,
-        message: 'Email not found',
-      });
+      return res.json({ err: 'Email or password are not correct' });
     }
 
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (!isMatch) {
-        return res.json({ loginSuccess: false, message: 'Wrong password' });
+        return res.json({ err: 'Email or password are not correct' });
       }
 
       user.generateToken((err, user) => {
-        if (err) return res.status(400).json(err);
+        if (err) return res.status(400).json({ err: err });
 
         return res
           .cookie('x_auth', user.token)
           .status(200)
-          .json({ loginSuccess: true, userId: user._id });
+          .json({ user: user });
       });
     });
   });
 });
 
-app.get('/api/users/auth', auth, (req, res) => {
-  return res.status(200).json({
-    _id: req.user._id,
-    isAuth: true,
-    isAdmin: req.user.role === 0 ? false : true,
-    email: req.user.email,
-    firstname: req.user.firstname,
-    lastname: req.user.lastname,
-    role: req.user.role,
-    image: req.user.image,
+app.get('/api/users/signout', auth, (req, res) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
+    if (err) return res.json({ err: err });
+    return res.status(200).clearCookie('x_auth').json({ user: user });
   });
 });
 
-app.get('/api/users/logout', auth, (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
-    if (err) return res.json({ logoutSuccess: false, err });
-    return res.status(200).clearCookie('x_auth').json({ logoutSuccess: true });
-  });
+app.get('/api/users/auth', auth, (req, res) => {
+  return res.status(200).json({ user: req.user });
 });

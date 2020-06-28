@@ -6,13 +6,12 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
-import rootReducer from './_reducers/index';
+import rootReducer from './redux/root-reducer';
 
 import * as serviceWorker from './serviceWorker';
 
 import './index.css';
-import App from './components/App';
-import 'antd/dist/antd.css';
+import App from './App';
 
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,

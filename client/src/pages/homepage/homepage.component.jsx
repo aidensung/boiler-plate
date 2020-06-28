@@ -1,36 +1,28 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../../_actions/user_actions';
+import { logoutUser } from '../../redux/user/user.actions';
 import { withRouter } from 'react-router-dom';
+
+import { HomePageContainer } from './homepage.styles';
 
 const HomePage = (props) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logoutUser()).then((response) => {
-      if (response.payload.logoutSuccess) {
-        props.history.push('/login');
-      } else {
-        alert('Log out failed');
+      if (!response.payload) return;
+
+      if (response.payload.user) {
+        props.history.push('/signin');
       }
     });
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100vh',
-      }}
-    >
+    <HomePageContainer>
       <h2>Home Page</h2>
-
       <button onClick={handleLogout}>Logout</button>
-    </div>
+    </HomePageContainer>
   );
 };
 

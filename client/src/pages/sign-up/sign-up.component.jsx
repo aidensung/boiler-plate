@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../../_actions/user_actions';
+import { registerUser } from '../../redux/user/user.actions';
 import { withRouter } from 'react-router-dom';
 
-const RegisterPage = (props) => {
+import { SignUpContainer } from './sign-up.styles';
+
+const SignUpPage = (props) => {
   const dispatch = useDispatch();
 
   const [userCredentials, setCredentials] = useState({
@@ -26,14 +28,31 @@ const RegisterPage = (props) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      return alert('Passwords do not match!');
+      setCredentials({
+        password: '',
+        confirmPassword: '',
+      });
+
+      return alert('Passwords do not match');
     }
 
     dispatch(registerUser(userCredentials)).then((response) => {
-      if (response.payload.registerSuccess) {
-        props.history.push('/login');
-      } else {
-        alert('Register failed');
+      setCredentials({
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      });
+
+      if (!response.payload) return;
+
+      if (response.payload.user) {
+        props.history.push('/signin');
+      }
+
+      if (response.payload.err) {
+        alert(response.payload.err);
       }
     });
   };
@@ -45,15 +64,7 @@ const RegisterPage = (props) => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100vh',
-      }}
-    >
+    <SignUpContainer>
       <form
         style={{ display: 'flex', flexDirection: 'column' }}
         onSubmit={handleSubmit}
@@ -106,8 +117,8 @@ const RegisterPage = (props) => {
         <br />
         <button>Register</button>
       </form>
-    </div>
+    </SignUpContainer>
   );
 };
 
-export default withRouter(RegisterPage);
+export default withRouter(SignUpPage);

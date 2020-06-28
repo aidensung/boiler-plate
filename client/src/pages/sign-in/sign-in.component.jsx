@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../../../_actions/user_actions';
+import { loginUser } from '../../redux/user/user.actions';
 import { withRouter } from 'react-router-dom';
 
-const LoginPage = (props) => {
+import { SignInContainer } from './sign-in.styles';
+
+const SignInPage = (props) => {
   const dispatch = useDispatch();
 
   const [userCredentials, setCredentials] = useState({
@@ -17,10 +19,19 @@ const LoginPage = (props) => {
     event.preventDefault();
 
     dispatch(loginUser(userCredentials)).then((response) => {
-      if (response.payload.loginSuccess) {
+      setCredentials({
+        email: '',
+        password: '',
+      });
+
+      if (!response.payload) return;
+
+      if (response.payload.user) {
         props.history.push('/');
-      } else {
-        alert('Login Failed');
+      }
+
+      if (response.payload.err) {
+        alert(response.payload.err);
       }
     });
   };
@@ -32,15 +43,7 @@ const LoginPage = (props) => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100vh',
-      }}
-    >
+    <SignInContainer>
       <form
         style={{ display: 'flex', flexDirection: 'column' }}
         onSubmit={handleSubmit}
@@ -66,8 +69,8 @@ const LoginPage = (props) => {
         <br />
         <button>Login</button>
       </form>
-    </div>
+    </SignInContainer>
   );
 };
 
-export default withRouter(LoginPage);
+export default withRouter(SignInPage);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { auth } from '../_actions/user_actions';
+import { auth } from '../redux/user/user.actions';
 
 export default function (SpecificComponent, option, adminRoute = null) {
   // null => anyone can access
@@ -11,12 +11,15 @@ export default function (SpecificComponent, option, adminRoute = null) {
     const dispatch = useDispatch();
 
     dispatch(auth()).then((response) => {
-      if (!response.payload.isAuth) {
+      if (!response.payload) {
+        if (adminRoute) {
+          props.history.push('/');
+        }
         if (option) {
-          props.history.push('/login');
+          props.history.push('/signin');
         }
       } else {
-        if (adminRoute && !response.payload.isAdmin) {
+        if (adminRoute && response.payload.user.role === 0) {
           props.history.push('/');
         } else {
           if (option === false) {
