@@ -81,8 +81,8 @@ const signUpRequest = (userCredentials) => {
 
 export function* signUp({ payload }) {
   try {
-    const user = yield signUpRequest(payload);
-    yield put(signUpSuccess(user));
+    const userCredentials = yield signUpRequest(payload);
+    yield put(signUpSuccess(userCredentials));
   } catch (err) {
     yield put(signUpFailure(err));
   }
@@ -92,11 +92,20 @@ export function* onSignUpStart() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
 }
 
+export function* signInAfterSignUp({ payload }) {
+  yield signInWithEmail({ payload: payload });
+}
+
+export function* onSignUpSuccess() {
+  yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp);
+}
+
 export function* userSagas() {
   yield all([
     call(onEmailSignInStart),
     call(onCheckUserAuth),
     call(onSignOutStart),
     call(onSignUpStart),
+    call(onSignUpSuccess),
   ]);
 }

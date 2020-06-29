@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { registerUser } from '../../redux/user/user.actions';
-// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { signUpStart } from '../../redux/user/user.actions';
@@ -9,8 +6,6 @@ import { signUpStart } from '../../redux/user/user.actions';
 import { SignUpContainer } from './sign-up.styles';
 
 const SignUpPage = ({ signUpStart }) => {
-  // const dispatch = useDispatch();
-
   const [userCredentials, setCredentials] = useState({
     firstname: '',
     lastname: '',
@@ -38,26 +33,6 @@ const SignUpPage = ({ signUpStart }) => {
 
       return alert('Passwords do not match');
     }
-
-    // dispatch(registerUser(userCredentials)).then((response) => {
-    //   setCredentials({
-    //     firstname: '',
-    //     lastname: '',
-    //     email: '',
-    //     password: '',
-    //     confirmPassword: '',
-    //   });
-
-    //   if (!response.payload) return;
-
-    //   if (response.payload.user) {
-    //     props.history.push('/signin');
-    //   }
-
-    //   if (response.payload.err) {
-    //     alert(response.payload.err);
-    //   }
-    // });
 
     signUpStart(userCredentials);
 

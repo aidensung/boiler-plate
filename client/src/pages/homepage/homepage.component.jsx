@@ -1,7 +1,4 @@
 import React from 'react';
-// import { useDispatch } from 'react-redux';
-// import { logoutUser } from '../../redux/user/user.actions';
-// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
@@ -12,16 +9,6 @@ import { signOutStart } from '../../redux/user/user.actions';
 import { HomePageContainer } from './homepage.styles';
 
 const HomePage = ({ currentUser, signOutStart }) => {
-  // const handleLogout = () => {
-  //   dispatch(logoutUser()).then((response) => {
-  //     if (!response.payload) return;
-
-  //     if (response.payload.user) {
-  //       props.history.push('/signin');
-  //     }
-  //   });
-  // };
-
   return (
     <HomePageContainer>
       <h2>Home Page</h2>

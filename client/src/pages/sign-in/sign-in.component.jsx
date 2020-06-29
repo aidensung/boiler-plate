@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { loginUser } from '../../redux/user/user.actions';
-// import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { emailSignInStart } from '../../redux/user/user.actions';
@@ -9,36 +6,12 @@ import { emailSignInStart } from '../../redux/user/user.actions';
 import { SignInContainer } from './sign-in.styles';
 
 const SignInPage = ({ emailSignInStart }) => {
-  // const dispatch = useDispatch();
-
   const [userCredentials, setCredentials] = useState({
     email: '',
     password: '',
   });
 
   const { email, password } = userCredentials;
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-
-  //   dispatch(loginUser(userCredentials)).then((response) => {
-  //     setCredentials({
-  //       email: '',
-  //       password: '',
-  //     });
-
-  //     if (!response.payload) return;
-
-  //     if (response.payload.user) {
-  //       props.history.push('/');
-  //     }
-
-  //     if (response.payload.err) {
-  //       console.log(response.payload);
-  //       alert(response.payload.err);
-  //     }
-  //   });
-  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
