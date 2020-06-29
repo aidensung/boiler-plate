@@ -50,29 +50,26 @@ app.post('/api/users/signup', (req, res) => {
   const user = new User(req.body);
 
   user.save((err, user) => {
-    if (err) return res.json({ err: 'Sign-up failed' });
-    return res.status(200).json({ user: user });
+    if (err) return res.status(400).json(err);
+    return res.status(200).json(user);
   });
 });
 
 app.post('/api/users/signin', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
-      return res.json({ err: 'Email or password are not correct' });
+      return res.status(401).json(err);
     }
 
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (!isMatch) {
-        return res.json({ err: 'Email or password are not correct' });
+        return res.status(401).json(err);
       }
 
       user.generateToken((err, user) => {
-        if (err) return res.status(400).json({ err: err });
+        if (err) return res.status(400).json(err);
 
-        return res
-          .cookie('x_auth', user.token)
-          .status(200)
-          .json({ user: user });
+        return res.cookie('x_auth', user.token).status(200).json(user);
       });
     });
   });
@@ -80,11 +77,11 @@ app.post('/api/users/signin', (req, res) => {
 
 app.get('/api/users/signout', auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: '' }, (err, user) => {
-    if (err) return res.json({ err: err });
-    return res.status(200).clearCookie('x_auth').json({ user: user });
+    if (err) return res.status(400).json(err);
+    return res.status(200).clearCookie('x_auth').json(user);
   });
 });
 
 app.get('/api/users/auth', auth, (req, res) => {
-  return res.status(200).json({ user: req.user });
+  return res.status(200).json(req.user);
 });

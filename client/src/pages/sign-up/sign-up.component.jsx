@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { registerUser } from '../../redux/user/user.actions';
-import { withRouter } from 'react-router-dom';
+// import { useDispatch } from 'react-redux';
+// import { registerUser } from '../../redux/user/user.actions';
+// import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { signUpStart } from '../../redux/user/user.actions';
 
 import { SignUpContainer } from './sign-up.styles';
 
-const SignUpPage = (props) => {
-  const dispatch = useDispatch();
+const SignUpPage = ({ signUpStart }) => {
+  // const dispatch = useDispatch();
 
   const [userCredentials, setCredentials] = useState({
     firstname: '',
@@ -36,24 +39,34 @@ const SignUpPage = (props) => {
       return alert('Passwords do not match');
     }
 
-    dispatch(registerUser(userCredentials)).then((response) => {
-      setCredentials({
-        firstname: '',
-        lastname: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-      });
+    // dispatch(registerUser(userCredentials)).then((response) => {
+    //   setCredentials({
+    //     firstname: '',
+    //     lastname: '',
+    //     email: '',
+    //     password: '',
+    //     confirmPassword: '',
+    //   });
 
-      if (!response.payload) return;
+    //   if (!response.payload) return;
 
-      if (response.payload.user) {
-        props.history.push('/signin');
-      }
+    //   if (response.payload.user) {
+    //     props.history.push('/signin');
+    //   }
 
-      if (response.payload.err) {
-        alert(response.payload.err);
-      }
+    //   if (response.payload.err) {
+    //     alert(response.payload.err);
+    //   }
+    // });
+
+    signUpStart(userCredentials);
+
+    setCredentials({
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     });
   };
 
@@ -121,4 +134,8 @@ const SignUpPage = (props) => {
   );
 };
 
-export default withRouter(SignUpPage);
+const mapDispatchToProps = (dispatch) => ({
+  signUpStart: (userCredentials) => dispatch(signUpStart(userCredentials)),
+});
+
+export default connect(null, mapDispatchToProps)(SignUpPage);

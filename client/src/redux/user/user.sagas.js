@@ -3,7 +3,15 @@ import { takeLatest, put, all, call } from 'redux-saga/effects';
 import axios from 'axios';
 
 import UserActionTypes from './user.types';
-import { signInSuccess, signInFailure } from './user.actions';
+
+import {
+  signInSuccess,
+  signInFailure,
+  signOutSuccess,
+  signOutFailure,
+  signUpSuccess,
+  signUpFailure,
+} from './user.actions';
 
 const signInWithEmailAndPassword = (emailAndPassword) => {
   const signInResponse = axios
@@ -15,10 +23,10 @@ const signInWithEmailAndPassword = (emailAndPassword) => {
 
 export function* signInWithEmail({ payload }) {
   try {
-    const signInResponse = yield signInWithEmailAndPassword(payload);
-    yield put(signInSuccess(signInResponse.user));
+    const user = yield signInWithEmailAndPassword(payload);
+    yield put(signInSuccess(user));
   } catch (err) {
-    yield put(signInFailure(signInResponse.user));
+    yield put(signInFailure(err));
   }
 }
 
@@ -26,12 +34,58 @@ export function* onEmailSignInStart() {
   yield takeLatest(UserActionTypes.EMAIL_SIGN_IN_START, signInWithEmail);
 }
 
+const getCurrentUser = () => {
+  const user = axios.get('/api/users/auth').then((response) => response.data);
+
+  return user;
+};
+
+export function* isUserAuthenticated() {
+  try {
+    const userAuth = yield getCurrentUser();
+    if (!userAuth) return;
+    yield put(signInSuccess(userAuth));
+  } catch (err) {
+    yield put(signInFailure(err));
+  }
+}
+
 export function* onCheckUserAuth() {
   yield takeLatest(UserActionTypes.CHECK_USER_AUTH, isUserAuthenticated);
 }
 
+const signOutRequest = () => {
+  axios.get('/api/users/signout').then((response) => response.data);
+};
+
+export function* signOut() {
+  try {
+    yield signOutRequest();
+    yield put(signOutSuccess());
+  } catch (err) {
+    yield put(signOutFailure(err));
+  }
+}
+
 export function* onSignOutStart() {
   yield takeLatest(UserActionTypes.SIGN_OUT_START, signOut);
+}
+
+const signUpRequest = (userCredentials) => {
+  const signUpResponse = axios
+    .post('/api/users/signup', userCredentials)
+    .then((response) => response.data);
+
+  return signUpResponse;
+};
+
+export function* signUp({ payload }) {
+  try {
+    const user = yield signUpRequest(payload);
+    yield put(signUpSuccess(user));
+  } catch (err) {
+    yield put(signUpFailure(err));
+  }
 }
 
 export function* onSignUpStart() {
@@ -45,52 +99,4 @@ export function* userSagas() {
     call(onSignOutStart),
     call(onSignUpStart),
   ]);
-}
-
-// /////////////////////////////////////////////////
-// /////////////////////////////////////////////////
-// /////////////////////////////////////////////////
-
-export function loginUser(dataToSubmit) {
-  const request = axios
-    .post('/api/users/signin', dataToSubmit)
-    .then((response) => response.data);
-
-  return {
-    type: UserActionTypes.SIGN_IN_SUCCESS,
-    payload: request,
-  };
-}
-
-export function registerUser(dataToSubmit) {
-  const request = axios
-    .post('/api/users/signup', dataToSubmit)
-    .then((response) => response.data);
-
-  return {
-    type: UserActionTypes.SIGN_UP_SUCCESS,
-    payload: request,
-  };
-}
-
-export function auth() {
-  const request = axios
-    .get('/api/users/auth')
-    .then((response) => response.data);
-
-  return {
-    type: UserActionTypes.SIGN_OUT_SUCCESS,
-    payload: request,
-  };
-}
-
-export function logoutUser() {
-  const request = axios
-    .get('/api/users/signout')
-    .then((response) => response.data);
-
-  return {
-    type: UserActionTypes.SIGN_OUT_SUCCESS,
-    payload: request,
-  };
 }
