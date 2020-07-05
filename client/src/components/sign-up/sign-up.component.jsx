@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import { signUpStart } from '../../redux/user/user.actions';
+import { selectError } from '../../redux/user/user.selectors';
 
-import { SignUpContainer } from './sign-up.styles';
+import FormInput from '../form-input/form-input.component';
+import CustomButton from '../custom-button/custom-button.component';
 
-const SignUpPage = ({ signUpStart }) => {
+import { SignUpContainer, SignUpTitle } from './sign-up.styles';
+
+const SignUp = ({ signUpStart, error }) => {
   const [userCredentials, setCredentials] = useState({
     firstname: '',
     lastname: '',
@@ -27,6 +32,9 @@ const SignUpPage = ({ signUpStart }) => {
 
     if (password !== confirmPassword) {
       setCredentials({
+        firstname: '',
+        lastname: '',
+        email: '',
         password: '',
         confirmPassword: '',
       });
@@ -51,66 +59,72 @@ const SignUpPage = ({ signUpStart }) => {
     setCredentials({ ...userCredentials, [name]: value });
   };
 
+  useEffect(() => {
+    if (!error) return;
+
+    if (error.response.status === 409) {
+      alert('The email address is already in use by another account');
+      window.location.reload();
+    }
+  });
+
   return (
     <SignUpContainer>
-      <form
-        style={{ display: 'flex', flexDirection: 'column' }}
-        onSubmit={handleSubmit}
-      >
-        <label>First Name</label>
-        <input
+      <SignUpTitle>I do not have an account</SignUpTitle>
+      <span>Sign up with your email and password</span>
+      <form onSubmit={handleSubmit}>
+        <FormInput
           name='firstname'
           type='text'
           value={firstname}
           onChange={handleChange}
-          label='firstname'
+          label='First Name'
           required
         />
-        <label>Last Name</label>
-        <input
+        <FormInput
           name='lastname'
           type='text'
           value={lastname}
           onChange={handleChange}
-          label='lastname'
+          label='Last Name'
           required
         />
-        <label>Email</label>
-        <input
+        <FormInput
           name='email'
           type='email'
           value={email}
           onChange={handleChange}
-          label='email'
+          label='Email'
           required
         />
-        <label>Password</label>
-        <input
+        <FormInput
           name='password'
           type='password'
           value={password}
           onChange={handleChange}
-          label='email'
+          label='Password'
           required
         />
-        <label>Confirm Password</label>
-        <input
+        <FormInput
           name='confirmPassword'
           type='password'
           value={confirmPassword}
           onChange={handleChange}
-          label='confirmPassword'
+          label='Confirm Password'
           required
         />
-        <br />
-        <button>Register</button>
+        <CustomButton type='submit'> SIGN UP </CustomButton>
       </form>
     </SignUpContainer>
   );
 };
 
+const mapStateToProps = createStructuredSelector({
+  error: selectError,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   signUpStart: (userCredentials) => dispatch(signUpStart(userCredentials)),
 });
 
-export default connect(null, mapDispatchToProps)(SignUpPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

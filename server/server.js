@@ -47,11 +47,15 @@ app.listen(port, (error) => {
 });
 
 app.post('/api/users/signup', (req, res) => {
-  const user = new User(req.body);
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (user) return res.status(409).json(err);
 
-  user.save((err, user) => {
-    if (err) return res.status(400).json(err);
-    return res.status(200).json(req.body);
+    const newUser = new User(req.body);
+
+    newUser.save((err, user) => {
+      if (err) return res.status(400).json(err);
+      return res.status(200).json(req.body);
+    });
   });
 });
 

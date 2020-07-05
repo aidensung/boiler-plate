@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import HomePage from './pages/homepage/homepage.component';
-import AboutPage from './pages/aboutpage/aboutpage.component';
-import SignInPage from './pages/sign-in/sign-in.component';
-import SignUpPage from './pages/sign-up/sign-up.component';
+import ProjectPage from './pages/projectpage/projectpage.component';
+import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import Header from './components/header/header.component';
 
 import { GlobalStyle } from './global.styles';
@@ -27,26 +26,15 @@ const App = ({ checkUserAuth, currentUser }) => {
         <Route exact path='/' component={HomePage} />
         <Route
           exact
-          path='/about'
-          render={() =>
-            !currentUser ? (
-              <Redirect to='/' />
-            ) : currentUser.role === 0 ? (
-              <Redirect to='/' />
-            ) : (
-              <AboutPage />
-            )
-          }
+          path='/project'
+          render={() => (!currentUser ? <Redirect to='/' /> : <ProjectPage />)}
         />
         <Route
           exact
           path='/signin'
-          render={() => (currentUser ? <Redirect to='/' /> : <SignInPage />)}
-        />
-        <Route
-          exact
-          path='/signup'
-          render={() => (currentUser ? <Redirect to='/' /> : <SignUpPage />)}
+          render={() =>
+            currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />
+          }
         />
       </Switch>
     </div>
